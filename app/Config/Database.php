@@ -38,7 +38,7 @@ class Database extends \CodeIgniter\Database\Config
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
-		'DBDebug'  => (ENVIRONMENT !== 'production'),
+		'DBDebug'  => (ENVIRONMENT !== 'development'),
 		'cacheOn'  => false,
 		'cacheDir' => '',
 		'charset'  => 'utf8',
@@ -50,6 +50,28 @@ class Database extends \CodeIgniter\Database\Config
 		'failover' => [],
 		'port'     => 3306,
 	];
+	
+	// public $default = [
+	// 	'DSN'      => 'pgsql:host=localhost;port=5432;dbname=sipoyan;user=postgres;password=admin123',
+	// 	'hostname' => 'localhost',
+	// 	'username' => 'postgre',
+	// 	'password' => 'admin123',
+	// 	'database' => 'sipoyan',
+	// 	'DBDriver' => 'Postgre',
+	// 	'DBPrefix' => '',
+	// 	'pConnect' => false,
+	// 	'DBDebug'  => (ENVIRONMENT !== 'development'),
+	// 	'cacheOn'  => false,
+	// 	'cacheDir' => '',
+	// 	'charset'  => 'utf8',
+	// 	'DBCollat' => 'utf8_general_ci',
+	// 	'swapPre'  => '',
+	// 	'encrypt'  => false,
+	// 	'compress' => false,
+	// 	'strictOn' => false,
+	// 	'failover' => [],
+	// 	'port'     => 5432,
+	// ];
 
 	/**
 	 * This database connection is used when
