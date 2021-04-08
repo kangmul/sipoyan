@@ -5,11 +5,11 @@ use CodeIgniter\Model;
 
 class KotaModel extends Model
 {
-	protected $table = 'ref_kota';
+	protected $table = 'ref_kab_kota';
 	protected $primaryKey = 'id';
 	protected $setAutoIncrement = true;
 	protected $returnType = 'array';
-	protected $allowFields = ['kota', 'nama'];
+	protected $allowFields = ['id_ref_provinsi', 'nama'];
 	public function getData()
 	{
 		echo 'data kota';

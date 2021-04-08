@@ -18,8 +18,9 @@ class Masterdatawarga extends BaseController
 
     public function createdatawarga()
     {
-        $kota = new KotaModel();
-    	$data = [
+        $kota = new KotaModel();   	
+        // dd($kota);        
+        $data = [
     		'title' => 'Tambah Data Warga',
             'kota' => $kota->findAll(),
     	];
