@@ -34,8 +34,24 @@ $routes->setAutoRoute(true);
 $routes->get('/home', 'Home::index');
 $routes->get('/defaults', 'Home::defaultBlank');
 $routes->get('/users', 'Admin\Users::index');
+
+$routes->get('/dashboard', 'Dashboard::index');
+
 $routes->get('/master/datawarga', 'Master\Masterdatawarga::index');
+$routes->get('/master/databalita', 'Master\Masterdatawarga::databalita');
+$routes->get('/master/datalansia', 'Master\Masterdatawarga::datalansia');
 $routes->get('/master/tambahdata', 'Master\Masterdatawarga::createdatawarga');
+
+// ambil data reference
+$routes->get('/refagama', 'Master\Referencedata::Ajaxagama');
+
+// post data to datatable ajax
+$routes->post('getdatawarga', 'Master\Masterdatawarga::Tabeldatawarga');
+$routes->post('getdatabalita', 'Master\Masterdatawarga::Tabeldatabalita');
+$routes->post('getdatalansia', 'Master\Masterdatawarga::Tabeldatalansia');
+
+// menyimpan datawarga
+$routes->post('/master/tambahdatawarga', 'Master\Masterdatawarga::savedatawarga');
 // 
 
 /**

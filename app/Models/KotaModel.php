@@ -10,11 +10,4 @@ class KotaModel extends Model
 	protected $setAutoIncrement = true;
 	protected $returnType = 'array';
 	protected $allowFields = ['id_ref_provinsi', 'nama'];
-	public function getData()
-	{
-		echo 'data kota';
-	}
 }
-
-
-?>

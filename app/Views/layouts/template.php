@@ -18,6 +18,12 @@
   <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
   <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/jquery-ui-dist/jquery-ui.min.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/jqvmap/dist/jqvmap.min.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/summernote/dist/summernote-bs4.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor'); ?>/node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?= base_url('assets/css'); ?>/style.css">
@@ -73,6 +79,14 @@
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/selectric/public/jquery.selectric.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/chart.js/dist/Chart.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/summernote/dist/summernote-bs4.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
 
   <!-- Template JS File -->
   <script src="<?= base_url('assets/js'); ?>/scripts.js"></script>
@@ -82,6 +96,10 @@
 
   <!-- form add tambah data warga -->
   <script type="text/javascript" src="<?= base_url('assets/js') ?>/formtambahdatawarga.js"></script>
+  <script type="text/javascript" src="<?= base_url('assets/js') ?>/viewmasterwarga.js"></script>
+  <!-- <script type="text/javascript" src="<?= base_url('assets/js') ?>/referencedata.js"></script> -->
+
+  <script src="<?= base_url('assets/js'); ?>/page/index.js"></script>
 </body>
 
 </html>

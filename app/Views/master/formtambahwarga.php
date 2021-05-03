@@ -1,16 +1,16 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-<div class="section-header">
+<div class="section-header shadow">
 	<h1><?= $title ?></h1>
 </div>
-<div class="card">
+<div class="card card-secondary shadow">
 	<div class="card-body">
 		<div class="row">
 			<div class="col-6 offset-3">
 				<div class="form-group row">
 					<label class="col-sm-3 col-form-label" for="nokk">No KK</label>
 					<div class="col-sm-9">
-						<input type="text" class="form-control text-uppercase form-control-sm" name="nokk" id="nokk" value="3273210000000">
+						<input type="text" class="form-control keunumber form-control-sm" name="nokk" id="nokk" value="327321">
 						<div class="invalid-feedback">nokk</div>
 					</div>
 				</div>
@@ -64,7 +64,7 @@
 	</div>
 </div>
 
-<div class="card">
+<div class="card card-primary shadow">
 	<div class="card-body">
 		<div class="row">
 			<div class="col-md-6 col-sm-6 col-lg-6">
@@ -72,21 +72,21 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="nama" id="nama">Nama</label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control text-uppercase" name="nama" id="nama" required="required">
+							<input type="text" class="form-control text-uppercase nama" name="nama" id="nama" required="required">
 							<div class="invalid-feedback">What's your name?</div>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="nik" id="nik">NIK</label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" name="nik" id="nik" required>
+							<input type="text" class="form-control keunumber nik" name="nik" id="nik" required>
 							<div class="invalid-feedback">What's your name?</div>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" id="jk">Jenis Kelamin</label>
 						<div class="col-sm-9">
-							<select class="form-control selectric" name="jk">
+							<select class="form-control selectric jk" name="jk" id="jk">
 								<option value="">-- Pilih --</option>
 								<option value="L">Laki - laki</option>
 								<option value="P">Perempuan</option>
@@ -96,10 +96,10 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="tmp_lahir" id="tmp_lahir">Tempat Lahir</label>
 						<div class="col-sm-9">
-							<select class="form-control select2" name="tmp_lahir" id="tmp_lahir">
+							<select class="form-control select2 tmp_lahir" name="tmp_lahir" id="tmp_lahir" data-url="<?php echo site_url('datakota') ?>">
 								<option value=''>-- Pilih --</option>
 								<?php foreach ($kota as $val) : ?>
-									<option value='<?= $val['id_ref_provinsi'] ?>'><?= $val['nama'] ?></option>
+									<option value="<?= $val['id'] ?>"><?= $val['nama'] ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -114,61 +114,59 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="agama" id="agama">Agama</label>
 						<div class="col-sm-9">
-							<select class="form-control select2" name="agama" id="agama">
+							<select class="form-control select2 agama refagama" name="agama" id="agama" data-url="<?php echo site_url('/refagama') ?>">
 								<option value=''>-- Pilih --</option>
-								<option value='islam'>Islam</option>
-								<option value='kristen'>Kristen</option>
+								<?php foreach ($agama as $val) : ?>
+									<option value="<?php echo $val["kode_agama"] ?>"><?php echo $val["agama"] ?></option>
+								<?php endforeach;  ?>
 							</select>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="pendidikan" class="col-sm-3 col-form-label" id="pendidikan">Pendidikan</label>
 						<div class="col-sm-9">
-							<select name="pendidikan" id="pendidikan" class="form-control select2">
+							<select name="pendidikan" id="pendidikan" class="form-control select2 pendidikan">
 								<option value="">-- Pilih --</option>
-								<option value="-">Belum Sekolah</option>
-								<option value="SD">SD</option>
-								<option value="SMP">SMP</option>
-								<option value="SMP">Strata I</option>
-								<option value="SMP">Diploma 1</option>
+								<?php foreach ($pendidikan as $val) : ?>
+									<option value="<?php echo $val["kode"] ?>"><?php echo $val["pendidikan"] ?> </option>
+								<?php endforeach; ?>
 							</select>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="jenis_pekerjaan" class="col-sm-3 col-form-label" id="jenis_pekerjaan">Jenis Pekerjaan</label>
 						<div class="col-sm-9">
-							<select class="form-control select2" name="jenis_pekerjaan" id="jenis_pekerjaan">
+							<select class="form-control select2 jenis_pekerjaan" name="jenis_pekerjaan" id="jenis_pekerjaan">
 								<option value=''>-- Pilih --</option>
-								<option value='0'>Belum Bekerja</option>
-								<option value='1'>TNI / POLRI</option>
-								<option value='2'>Wiraswasta</option>
+								<?php foreach ($pekerjaan as $val) : ?>
+									<option value="<?php echo $val["kode"] ?>"><?php echo $val["pekerjaan"] ?></option>
+								<?php endforeach; ?>
 							</select>
 						</div>
 					</div>
-					<!-- endcol1 -->
 			</div>
 
 			<div class="col-md-6 col-sm-6 col-lg-6">
 				<div class="form-group row">
 					<label for="status_perkawinan" class="col-form-label col-sm-4" id="status_perkawinan">Status Perkawinan</label>
 					<div class="col-sm-8">
-						<select class="form-control" name="status_perkawinan" id="status_perkawinan">
+						<select class="form-control select2 status_perkawinan" name="status_perkawinan" id="status_perkawinan">
 							<option value=''>-- Pilih --</option>
-							<option value='belum_menikah'>Belum Menikah</option>
-							<option value='menikah'>Menikah</option>
-							<option value='janda'>Janda</option>
-							<option value='duda'>Duda</option>
+							<?php foreach ($marital as $val) : ?>
+								<option value="<?php echo $val["kode"] ?>"><?php echo $val["marital"] ?></option>
+
+							<?php endforeach; ?>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="statushubkel" class="col-sm-4 col-form-label" id="statushubkel">Status Hubungan Keluarga</label>
 					<div class="col-sm-8">
-						<select name="statushubkel" id="statushubkel" class="form-control">
+						<select name="statushubkel" id="statushubkel" class="form-control statushubkel select2">
 							<option value=''>-- Pilih --</option>
-							<option value="1">Kepala Keluarga</option>
-							<option value="2">Istri</option>
-							<option value="3">Anak</option>
+							<?php foreach ($hubkel as $val) : ?>
+								<option value="<?php echo $val["kode"] ?>"><?php echo $val["hubungan_keluarga"] ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 				</div>
@@ -193,13 +191,13 @@
 				<div class="form-group row">
 					<label for="namaayah" class="col-sm-4 col-form-label" id="namaayah">Nama Ayah</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control text-uppercase" id="namaayah" name="namaayah">
+						<input type="text" class="form-control text-uppercase namaayah" id="namaayah" name="namaayah">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="namaibu" class="col-sm-4 col-form-label" id="namaibu">Nama Ibu</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control text-uppercase" id="namaibu" name="namaibu">
+						<input type="text" class="form-control text-uppercase namaibu" id="namaibu" name="namaibu">
 					</div>
 				</div>
 			</div>
@@ -213,19 +211,16 @@
 
 <div class="row">
 	<div class="col-12">
-		<div class="card">
+		<div class="card shadow card-warning">
 			<div class="card-body">
 				<div class="table-responsive">
 					<table class="table table-striped table-hover" id="tbl_temp_1">
 						<thead>
 							<tr>
-								<th class="text-center">
-									#
-								</th>
 								<th>Nama</th>
 								<th>NIK</th>
 								<th>Jenis Kelamin (kode)</th>
-								<th>Tempat Lahir</th>
+								<th>Tempat Lahir (kode)</th>
 								<th>Tanggal Lahir</th>
 								<th>Agama</th>
 								<th>Pendidikan</th>
@@ -241,15 +236,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
 
-							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="row mt-4">
 					<div class="col-12 text-right">
-						<button class="btn btn-success btn-sm"><i class="fas fa-paper-plane"></i> Simpan</button>
+						<button class="btn btn-success btn-sm" id="savealltodatabase" data-url="<?php echo site_url('/master/tambahdatawarga') ?>"><i class="fas fa-paper-plane"></i> Simpan</button>
 					</div>
 				</div>
 			</div>
