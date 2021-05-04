@@ -3,11 +3,6 @@
 <div class="section-header shadow card-primary">
 	<h1><?= $title  ?></h1>
 </div>
-<?php
-// dd($warga);
-// exit;
-
-?>
 <div class="row">
 	<div class="col-12">
 		<div class="card shadow">
@@ -17,7 +12,7 @@
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="table table-striped" id="table-2-data-master-warga" data-url="<?php echo site_url('getdatawarga') ?>">
+					<table class="table table-striped table-hover table-sm" id="table-2-data-master-warga" data-url="<?php echo site_url('getdatawarga') ?>" style="width:100%">
 						<thead>
 							<tr>
 								<th width="10">#</th>

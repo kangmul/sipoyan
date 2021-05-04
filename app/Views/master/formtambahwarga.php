@@ -6,7 +6,12 @@
 <div class="card card-secondary shadow">
 	<div class="card-body">
 		<div class="row">
-			<div class="col-6 offset-3">
+			
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				
 				<div class="form-group row">
 					<label class="col-sm-3 col-form-label" for="nokk">No KK</label>
 					<div class="col-sm-9">
@@ -14,19 +19,28 @@
 						<div class="invalid-feedback">nokk</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-6">
+			
 				<div class="form-group row">
 					<label class="col-sm-3 col-form-label" for="kepkk">Kepala Keluarga</label>
 					<div class="col-sm-7">
-						<input type="text" class="form-control text-uppercase form-control-sm" name="kepkk" id="kepkk" value="Jhon Doe">
+						<input type="text" class="form-control text-uppercase form-control-sm" name="kepkk" id="kepkk">
 						<div class="invalid-feedback">kepkk</div>
 					</div>
 				</div>
 
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label" for="alamat">Alamat</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control text-capitalize form-control-sm" name="alamat" id="alamat">
+						<div class="invalid-feedback">alamat</div>
+					</div>
+				</div>
+
+				
+			</div>
+
+
+			<div class="col-md-6">
 				<div class="form-group row">
 					<label class="col-sm-3 col-form-label" for="rtrw">RT / RW</label>
 					<div class="col-sm-3">
@@ -41,10 +55,7 @@
 						<div class="invalid-feedback">rw</div>
 					</div>
 				</div>
-			</div>
 
-
-			<div class="col-md-6">
 				<div class="form-group row">
 					<label class="col-sm-3 col-form-label" for="kelurahan">Kelurahan</label>
 					<div class="col-sm-9">

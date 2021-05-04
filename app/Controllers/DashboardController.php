@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\WargaModel;
 
-class Dashboard extends BaseController
+class DashboardController extends BaseController
 {
     protected $warga;
 
@@ -15,13 +15,13 @@ class Dashboard extends BaseController
 
     public function index()
     {
-        $warga = $this->warga->getAllWarga();
+        $warga = $this->warga->getAllWarga($key = false, $limit = 0, $offset = 0);
         $malewarga = $this->warga->countmalewarga();
         $femalewarga = $this->warga->countfemalewarga();
-        $balita = $this->warga->getbalita($key = false, 0, 0);
+        $balita = $this->warga->getbalita($key = false, $limit = 0, $offset = 0);
         $malebalita = $this->warga->countmalebalita();
         $femalebalita = $this->warga->countfemalebalita();
-        $lansia = $this->warga->getlansia($key = false, 0, 0);
+        $lansia = $this->warga->getlansia($key = false, $limit = 0, $offset = 0);
         $malelansia = $this->warga->countmalelansia();
         $femalelansia = $this->warga->countfemalelansia();
         $data = [
@@ -29,7 +29,7 @@ class Dashboard extends BaseController
             'jmlwarga' => $warga["jmldatawarga"],
             'jmlmalewarga' => $malewarga,
             'jmlfemalewarga' => $femalewarga,
-            'jmlbalita' => $balita['jmlbalita'],
+            'jmlbalita' => $balita['jmldatabalita'],
             'jmlfemalebalita' => $femalebalita,
             'jmlmalebalita' => $malebalita,
             'jmllansia' => $lansia['jmllansia'],

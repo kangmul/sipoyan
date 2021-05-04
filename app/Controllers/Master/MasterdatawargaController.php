@@ -19,9 +19,10 @@ use App\Models\WargaModel;
 use CodeIgniter\I18n\Time;
 use DateTime;
 
-class Masterdatawarga extends BaseController
+class MasterdatawargaController extends BaseController
 {
     protected $showdata;
+    protected $modelwarga;
 
     public function __construct()
     {
@@ -31,7 +32,7 @@ class Masterdatawarga extends BaseController
         $modelpekerjaan = new PekerjaanModel();
         $modelmarital = new MaritalModel();
         $modelhubkel = new HubungankelModel();
-        $modelwarga = new WargaModel();
+        $this->modelwarga = new WargaModel();
         $this->showdata = [
             'kota' => $modelkota->findAll(),
             'agama' => $modelagama->findAll(),
@@ -39,7 +40,7 @@ class Masterdatawarga extends BaseController
             'pekerjaan' => $modelpekerjaan->findAll(),
             'marital' => $modelmarital->findAll(),
             'hubkel' => $modelhubkel->findAll(),
-            'warga' => $modelwarga->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama as tempat_lahir')->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir')->findAll(),
+            'warga' => $this->modelwarga->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama as tempat_lahir')->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir')->findAll(),
 
         ];
     }
@@ -75,11 +76,10 @@ class Masterdatawarga extends BaseController
                 foreach ($datawarga["datatabel"] as $val) {
                     $data[] = [
                         "no_kk" => $val["nokk"],
+                        "kepala_keluarga" => $val["kepalakk"],
+                        "alamat" => $val["alamat"],
                         "rt" => $val["rt"],
                         "rw" => $val["rw"],
-                        "kel" => $val["kel"],
-                        "kec" => $val["kec"],
-                        "kepala_keluarga" => $val["kepalakk"],
                         "nama" => $val["nama"],
                         "nik" => $val["nik"],
                         "jk" => $val["jk"],
@@ -95,9 +95,21 @@ class Masterdatawarga extends BaseController
                         "no_kitap" => $val["nokitap"],
                         "nm_ayah" => $val["namaayah"],
                         "nm_ibu" => $val["namaibu"],
+                        "kel" => $val["kel"],
+                        "kec" => $val["kec"],
                         "created_at" => date('Y-m-d H:i:s')
                     ];
                 }
+                // var_dump($data);exit;
+                for ($i = 0; $i < count($datawarga["datatabel"]); $i++){
+                    $searchdata = $this->modelwarga->where(["nik" => $data[$i]["nik"]])->first();
+                    if(!empty($searchdata)){
+                        $response['success'] = false;
+                        $response['message'] = "Data ".$data[$i]["nama"]." sudah terdaftar";
+                        return $response;
+                    } 
+                }
+
                 $insertomodel = new WargaModel();
                 for ($i = 0; $i < count($datawarga["datatabel"]); $i++) {
                     $insertomodel->insert($data[$i]);
@@ -121,29 +133,17 @@ class Masterdatawarga extends BaseController
         try {
             if ($this->request->isAJAX()) {
                 $post = $this->request->getVar();
-                $offset = $post['start'] == '' ? '0' : $post['start'];
-                $limit = $post['length'] == '' ? '10' : $post['length'];
-                $search = $post['search']['value'];
+                $offset = $post['start'];
+                $limit = $post['length'];
+                $search = strtolower(str_replace(" ", "+", $post['search']['value']));
 
-                $db = \Config\Database::connect();
-                $builder = $db->table('warga');
-                $builder->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama kota')->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir');
-                $hasil = $builder->get($limit, $offset);
-                $totaldata = $builder->countAllResults();
-                $datahasil = $hasil->getResultArray();
-                if (!empty($search)) {
-                    $builder->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama kota')->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir')->like('warga.nama', $search, 'both');
-                    $hasil = $builder->get($limit, $offset);
-                    $countfiltered = $builder->countAllResults();
-                    $datahasil = $hasil->getResultArray();
-                }
-
-                $totalfiltered = empty($countfiltered) ? 0 : $countfiltered;
+                $data = $this->modelwarga->getAllWarga($search, $limit, $offset);
 
                 $datawarga = [];
                 $i = 1;
-                foreach ($datahasil as $key => $value) {
-                    $datawarga[$key][] = $i;
+                foreach ($data["datawarga"] as $key => $value) {
+                    $nomor = $offset + $i;
+                    $datawarga[$key][] = $nomor;
                     $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value["nama"]) . "</span>";
                     $datawarga[$key][] = $value["jk"];
                     $datawarga[$key][] = date("d-m-Y", strtotime($value["tgl_lahir"]));
@@ -155,17 +155,18 @@ class Masterdatawarga extends BaseController
                     $umurhari = $interval->d;
                     $datawarga[$key][] = $umurtahun . ' tahun ' . $umurbulan . ' bulan ' . $umurhari . ' hari';
                     $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value['kota']) . "</span>";
-                    $datawarga[$key][] = "<a href='#' class='badge badge-info'><span><i class='fas fa-eye'></i></span></a>";
+                    $datawarga[$key][] = "<a href='/detailwarga/" . $value['idwarga'] . "' class='badge'><i class='fas fa-eye'></i></a>";
                     $i++;
                 }
                 $forcingdata = [
                     'draw' => $post["draw"],
-                    'recordsTotal' => $totaldata,
-                    'recordsFiltered' => $totalfiltered,
+                    'recordsTotal' => $data["jmldatawarga"],
+                    'recordsFiltered' => $data["jmldatafilter"],
                     'start' => $post["start"],
                     'length' => $post["length"],
                     'data' => $datawarga
                 ];
+                // var_dump($forcingdata);
                 echo json_encode($forcingdata);
             }
         } catch (\Exception $e) {
@@ -186,39 +187,20 @@ class Masterdatawarga extends BaseController
         try {
             if ($this->request->isAJAX()) {
                 $post = $this->request->getVar();
-                $offset = $post['start'] == '' ? '0' : $post['start'];
-                $limit = $post['length'] == '' ? '10' : $post['length'];
-                $search = $post['search']['value'];
+                $offset = $post['start'];
+                $limit = $post['length'];
+                $search = strtolower(str_replace(" ", "+", $post['search']['value']));
 
-                $db = \Config\Database::connect();
-                $builder = $db->table('warga');
-                $builder->select('warga.nama, warga.jk, warga.tgl_lahir, warga.nm_ayah, warga.nm_ibu, ref_kab_kota.nama kota');
-                $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-5 years")));
-                $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
-                $builder->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir');
-                $hasil = $builder->get($limit, $offset);
-                $totaldata = $builder->countAllResults();
+                $datahasil = $this->modelwarga->getbalita($search, $limit, $offset);
 
-                $datahasil = $hasil->getResultArray();
-                if (!empty($search)) {
-                    $$builder->select('warga.nama, warga.jk, warga.tgl_lahir, warga.nm_ayah, warga.nm_ibu, ref_kab_kota.nama kota');
-                    $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-5 years")));
-                    $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
-                    $builder->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir')->like('warga.nama', $search, 'both');
-                    $hasil = $builder->get($limit, $offset);
-                    $countfiltered = $builder->countAllResults();
-                    $datahasil = $hasil->getResultArray();
-                }
-
-                $totalfiltered = empty($countfiltered) ? 0 : $countfiltered;
-
-                $datawarga = [];
+                $databalita = [];
                 $i = 1;
-                foreach ($datahasil as $key => $value) {
-                    $datawarga[$key][] = $i;
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value["nama"]) . "</span>";
-                    $datawarga[$key][] = $value["jk"];
-                    $datawarga[$key][] = date("d-m-Y", strtotime($value["tgl_lahir"]));
+                foreach ($datahasil["databalita"] as $key => $value) {
+                    $nomor = $offset + $i;
+                    $databalita[$key][] = $nomor;
+                    $databalita[$key][] = "<span class='text-capitalize'>" . strtolower($value["nama"]) . "</span>";
+                    $databalita[$key][] = $value["jk"];
+                    $databalita[$key][] = date("d-m-Y", strtotime($value["tgl_lahir"]));
                     $lahir = new DateTime($value["tgl_lahir"]);
                     $now = new DateTime();
                     $interval = $now->diff($lahir);
@@ -226,20 +208,20 @@ class Masterdatawarga extends BaseController
                     $umurbulan = ($interval->m) + $umurtahun;
                     $umurhari = $interval->d;
 
-                    $datawarga[$key][] = $umurbulan . ' bulan ' . $umurhari . ' hari';
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value["nm_ayah"]) . "</span>";
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value["nm_ibu"]) . "</span>";
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value['kota']) . "</span>";
-                    $datawarga[$key][] = "<a href='#' class='badge badge-info'><span><i class='fas fa-eye'></i></span></a>";
+                    $databalita[$key][] = $umurbulan . ' bulan ' . $umurhari . ' hari';
+                    $databalita[$key][] = "<span class='text-capitalize'>" . strtolower($value["nm_ayah"]) . "</span>";
+                    $databalita[$key][] = "<span class='text-capitalize'>" . strtolower($value["nm_ibu"]) . "</span>";
+                    $databalita[$key][] = "<span class='text-capitalize'>" . strtolower($value['kota']) . "</span>";
+                    $databalita[$key][] = "<a href='/detailwarga/" . $value['id_balita'] . "' class='badge'><i class='fas fa-eye'></i></a>";
                     $i++;
                 }
                 $forcingdata = [
                     'draw' => $post["draw"],
-                    'recordsTotal' => $totaldata,
-                    'recordsFiltered' => $totalfiltered,
+                    'recordsTotal' => $datahasil["jmldatabalita"],
+                    'recordsFiltered' => $datahasil["jmldatabalitafilter"],
                     'start' => $post["start"],
                     'length' => $post["length"],
-                    'data' => $datawarga
+                    'data' => $databalita
                 ];
                 echo json_encode($forcingdata);
             }
@@ -261,61 +243,53 @@ class Masterdatawarga extends BaseController
         try {
             if ($this->request->isAJAX()) {
                 $post = $this->request->getVar();
-                $offset = $post['start'] == '' ? '0' : $post['start'];
-                $limit = $post['length'] == '' ? '10' : $post['length'];
-                $search = $post['search']['value'];
+                $offset = $post['start'];
+                $limit = $post['length'];
+                $search = strtolower(str_replace(" ", "+", $post['search']['value']));
 
-                $db = \Config\Database::connect();
-                $builder = $db->table('warga');
-                $builder->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama kota');
-                $builder->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-45 years")));
-                // $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
-                $builder->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir');
-                $hasil = $builder->get($limit, $offset);
-                $totaldata = $builder->countAllResults();
-                $datahasil = $hasil->getResultArray();
-                if (!empty($search)) {
-                    $$builder->select('warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama kota');
-                    $builder->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-45 years")));
-                    // $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
-                    $builder->join('ref_kab_kota', 'ref_kab_kota.id = warga.tmp_lahir')->like('warga.nama', $search, 'both');
-                    $hasil = $builder->get($limit, $offset);
-                    $countfiltered = $builder->countAllResults();
-                    $datahasil = $hasil->getResultArray();
-                }
+                $datahasil = $this->modelwarga->getlansia($search, $limit, $offset);
 
-                $totalfiltered = empty($countfiltered) ? 0 : $countfiltered;
-
-                $datawarga = [];
+                $datalansia = [];
                 $i = 1;
-                foreach ($datahasil as $key => $value) {
-                    $datawarga[$key][] = $i;
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value["nama"]) . "</span>";
-                    $datawarga[$key][] = $value["jk"];
-                    $datawarga[$key][] = date("d-m-Y", strtotime($value["tgl_lahir"]));
+                foreach ($datahasil["datalansia"] as $key => $value) {
+                    $datalansia[$key][] = $i;
+                    $datalansia[$key][] = "<span class='text-capitalize'>" . strtolower($value["nama"]) . "</span>";
+                    $datalansia[$key][] = $value["jk"];
+                    $datalansia[$key][] = date("d-m-Y", strtotime($value["tgl_lahir"]));
                     $lahir = new DateTime($value["tgl_lahir"]);
                     $now = new DateTime();
                     $interval = $now->diff($lahir);
                     $umurtahun = $interval->y;
                     $umurbulan = $interval->m;
                     $umurhari = $interval->d;
-                    $datawarga[$key][] = $umurtahun . ' tahun ' . $umurbulan . ' bulan ' . $umurhari . ' hari';
-                    $datawarga[$key][] = "<span class='text-capitalize'>" . strtolower($value['kota']) . "</span>";
-                    $datawarga[$key][] = "<a href='#' class='badge badge-info'><span><i class='fas fa-eye'></i></span></a>";
+                    $datalansia[$key][] = $umurtahun . ' tahun ' . $umurbulan . ' bulan ' . $umurhari . ' hari';
+                    $datalansia[$key][] = "<span class='text-capitalize'>" . strtolower($value['kota']) . "</span>";
+                    $datalansia[$key][] = "<a href='/detailwarga/" . $value['id_lansia'] . "' class='badge'><i class='fas fa-eye'></i></a>";
                     $i++;
                 }
                 $forcingdata = [
                     'draw' => $post["draw"],
-                    'recordsTotal' => $totaldata,
-                    'recordsFiltered' => $totalfiltered,
+                    'recordsTotal' => $datahasil["jmllansia"],
+                    'recordsFiltered' => $datahasil["jmllansiafiltered"],
                     'start' => $post["start"],
                     'length' => $post["length"],
-                    'data' => $datawarga
+                    'data' => $datalansia
                 ];
                 echo json_encode($forcingdata);
             }
         } catch (\Exception $e) {
             die($e->getMessage());
         }
+    }
+
+    public function detailwarga($id)
+    {
+        $detailwarga = $this->modelwarga->detailwarga($id);
+        // dd($detailwarga[0]["nama"]);
+        $data = [
+            'title' => "Detail Warga",
+            'detailwarga' => $detailwarga[0],
+        ];
+        return view('master/detail', $data);
     }
 }

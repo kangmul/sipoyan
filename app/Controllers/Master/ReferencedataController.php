@@ -10,7 +10,7 @@ use App\Models\MaritalModel;
 use App\Models\PekerjaanModel;
 use App\Models\PendidikanModel;
 
-class Referencedata extends BaseController
+class ReferencedataController extends BaseController
 {
 
     protected $showdata;

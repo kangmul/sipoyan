@@ -77,7 +77,7 @@ function temporarytabel(data) {
       data[13].value.toUpperCase() +
       "</td><td>" +
       data[14].value.toUpperCase() +
-      "</td><td><a class='badge badge-danger badge-sm' onclick='hapusdatatemp(this)'><i class='fas fa-trash'></i></a></td></tr>"
+      "</td><td><a href='#' onclick='hapusdatatemp(this)'><i class='fas fa-trash'></i></a></td></tr>"
   );
   $.each(data, function(index, cod) {
     $("." + cod.name).val("");
@@ -86,7 +86,9 @@ function temporarytabel(data) {
     .prop("selectedIndex", 0)
     .selectric("refresh");
 
-  $(".agama, .tmp_lahir, .jenis_pekerjaan, .pendidikan, .status_perkawinan, .statushubkel")
+  $(
+    ".agama, .tmp_lahir, .jenis_pekerjaan, .pendidikan, .status_perkawinan, .statushubkel"
+  )
     .val(null)
     .trigger("change");
 }
@@ -138,6 +140,7 @@ $("#savealltodatabase").on("click", function() {
           } else {
             var subdatawrga = {
               nokk: $("#nokk").val(),
+              alamat: $("#alamat").val(),
               rt: $("#rt").val(),
               rw: $("#rw").val(),
               kel: $("#kelurahan").val(),
@@ -207,7 +210,7 @@ $("#savealltodatabase").on("click", function() {
             if (hasil.success) {
               swal({
                 title: "Berhasil !",
-                text: "Data Berhasil disimpan ke Database",
+                text: hasil.message,
                 icon: "success"
               });
               $("table#tbl_temp_1 tbody tr").remove();
@@ -215,7 +218,7 @@ $("#savealltodatabase").on("click", function() {
               swal({
                 icon: "error",
                 title: "Oooops.....",
-                text: "Gagal disimpan ke database"
+                text: hasil.message
               });
             }
           }

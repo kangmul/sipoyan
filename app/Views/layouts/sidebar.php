@@ -15,7 +15,7 @@
       <li class="nav-item dropdown">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Flamboyan 07</span></a>
         <ul class="dropdown-menu">
-          <li><a class="nav-link" href="layout-default.html">Posyandu</a></li>
+          <li><a class="nav-link" href="/posyandu">Posyandu</a></li>
           <li><a class="nav-link" href="layout-transparent.html">Posbindu</a></li>
           <li><a class="nav-link" href="layout-top-navigation.html">Dasa Wisma</a></li>
         </ul>

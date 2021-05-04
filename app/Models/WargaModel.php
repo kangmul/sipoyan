@@ -8,18 +8,33 @@ class WargaModel extends Model
 {
     protected $table = 'warga';
     protected $setAutoIncrement = true;
-    protected $allowedFields = ['no_kk', 'kepala_keluarga', 'rt', 'rw', 'nama', 'nik', 'jk', 'tmp_lahir', 'tgl_lahir', 'agama', 'pendidikan', 'jenis_pekerjaan', 'st_perkawinan', 'st_hub_kel', 'kewarganegaraan', 'no_passport', 'no_kitap', 'nm_ayah', 'nm_ibu', 'kel', 'kec', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields = ['no_kk', 'kepala_keluarga', 'alamat', 'rt', 'rw', 'nama', 'nik', 'jk', 'tmp_lahir', 'tgl_lahir', 'agama', 'pendidikan', 'jenis_pekerjaan', 'st_perkawinan', 'st_hub_kel', 'kewarganegaraan', 'no_passport', 'no_kitap', 'nm_ayah', 'nm_ibu', 'kel', 'kec', 'created_at', 'updated_at', 'deleted_at'];
     protected $useSoftDeletes = true;
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    public function getAllWarga()
+    public function getAllWarga($key, $limit, $offset)
     {
+        $builder = $this->table("warga");
+        $totaldata = $builder->countAllResults(false);
+        $builder->select("LOWER(warga.nama) as nama, warga.id as idwarga, warga.jk, warga.tgl_lahir, warga.tmp_lahir, ref_kab_kota.nama as kota ");
+        $builder->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir", "inner");
+        if (!empty($key)) {
+            $builder->like("warga.nama", $key, "both");
+            $getdatawarga = $builder->get($limit, $offset);
+            $datawarga = $getdatawarga->getResultArray();
+            $countfiltered = count($datawarga);
+        } else {
+            $getdatawarga = $builder->get($limit, $offset);
+            $datawarga = $getdatawarga->getResultArray();
+            $countfiltered = $builder->countAllResults();
+        }
         $response = [
-            'datawarga' => $this->findAll(),
-            'jmldatawarga' => $this->countAllResults(),
+            'datawarga' => $datawarga,
+            'jmldatawarga' => $totaldata,
+            'jmldatafilter' => $countfiltered,
         ];
         return $response;
     }
@@ -34,30 +49,35 @@ class WargaModel extends Model
         return  $this->where("warga.jk = ", "P")->countAllResults();
     }
 
-    public function getbalita($key = '', $limit, $offset)
+    public function getbalita($key, $limit, $offset)
     {
         $builder = $this->table('warga');
-        $builder->select(["LOWER(warga.nama), warga.jk, warga.tgl_lahir, warga.nm_ayah, warga.nm_ibu, ref_kab_kota.nama kota"]);
+        $builder->select(["LOWER(warga.nama) as nama, warga.id as id_balita, warga.jk, warga.tgl_lahir, warga.nm_ayah, warga.nm_ibu, ref_kab_kota.nama as kota"]);
         $builder->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir");
         $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-5 years")));
         $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
-        if ($key) {
-            $data = $builder->like("warga.nama", strtolower($key));
-            $jmlfiltered = $builder->countAllResults();
+
+        if (!empty($key)) {
+            $builder->like("warga.nama", $key, "both");
+            $getdatabalita = $builder->get($limit, $offset);
+            $databalita = $getdatabalita->getResultArray();
+            $countfiltered = count($databalita);
+
             $response = [
-                'databalita' => $data,
-                'jmlbalita' => $jmlfiltered
+                'databalita' => $databalita,
+                'jmldatabalita' => $countfiltered,
+                'jmldatabalitafilter' => $countfiltered,
             ];
             return $response;
         }
-        $jmlbalita = $this->countAllResults(false);
-        // $jmlmale = $male->countAllResults(false);
-        // $jmlfemale = $female->countAllResults(false);
-        $databalita = $this->get($limit, $offset);
-        $balita = $databalita->getResultArray();
+        $getdatabalita = $this->get($limit, $offset);
+        $databalita = $getdatabalita->getResultArray();
+        $countfiltered = count($databalita);
+        $totaldata = count($databalita);
         $response = [
-            'databalita' => $balita,
-            'jmlbalita' => $jmlbalita,
+            'databalita' => $databalita,
+            'jmldatabalita' => $totaldata,
+            'jmldatabalitafilter' => $countfiltered,
         ];
         return $response;
     }
@@ -78,18 +98,21 @@ class WargaModel extends Model
         return $jmlfemalebalita = $this->countAllResults();
     }
 
-    public function getlansia($key = false, $limit, $offset)
+    public function getlansia($key, $limit, $offset)
     {
-        $this->select("warga.nama, warga.jk, warga.tgl_lahir, ref_kab_kota.nama kota");
+        $this->select("LOWER(warga.nama) as nama, warga.id as id_lansia, warga.jk, warga.tgl_lahir, ref_kab_kota.nama as kota");
         $this->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-45 years")));
         $this->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir");
-        if ($key) {
+        if (!empty($key)) {
+            $jmllansia = $this->countAllResults();
             $this->like("warga.nama", $key, "both");
             $this->get($limit, $offset);
             $lansia = $this->getResultArray();
+            $jmldata = count($lansia);
             $response = [
                 'datalansia' => $lansia,
-                'jmllansia' => $this->countAllResults(),
+                'jmllansia' => $jmllansia,
+                'jmllansiafiltered' => $jmldata
             ];
             return $response;
         }
@@ -98,7 +121,8 @@ class WargaModel extends Model
         $lansia = $datalansia->getResultArray();
         $response = [
             'datalansia' => $lansia,
-            'jmllansia' => $jmllansia,
+            'jmllansia' => count($lansia),
+            'jmllansiafiltered' => count($lansia),
 
         ];
         return $response;
@@ -116,5 +140,20 @@ class WargaModel extends Model
         $this->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-45 years")));
         $this->where("warga.jk = ", "P");
         return $jmlfemalelansia = $this->countAllResults();
+    }
+
+    public function detailwarga($id)
+    {
+        // $this->select("warga.*, ref_kab_kota.nama as kota, ref_agama.agama as agama, ref_pendidikan.pendidikan as sekolah, ref_jenis_pekerjaan.pekerjaan as pekerjaan, ref_marital.marital as stkawin, ref_hub_kel.hubungan_keluarga as hbkel");
+        $this->select("warga.*, warga.nama as nama, ref_kab_kota.nama as kota, ref_agama.agama, ref_pendidikan.pendidikan, ref_jenis_pekerjaan.pekerjaan, ref_marital.marital, ref_hub_kel.hubungan_keluarga");
+        $this->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir", "inner");
+        $this->join("ref_agama", "ref_agama.kode_agama = warga.agama", "left");
+        $this->join("ref_pendidikan", "ref_pendidikan.kode =  warga.pendidikan", "left");
+        $this->join("ref_jenis_pekerjaan", "ref_jenis_pekerjaan.kode = warga.jenis_pekerjaan");
+        $this->join("ref_marital", "ref_marital.kode = warga.st_perkawinan");
+        $this->join("ref_hub_kel", "ref_hub_kel.kode = warga.st_hub_kel");
+        $this->Where('warga.id =', $id);
+        $data = $this->get();
+        return $data->getResultArray();
     }
 }

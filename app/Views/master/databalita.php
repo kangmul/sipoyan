@@ -17,7 +17,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-responsive" id="table-2-data-master-balita" data-url="<?php echo site_url('getdatabalita') ?>">
+                    <table class="table table-striped table-hover table-sm" id="table-2-data-master-balita" data-url="<?php echo site_url('getdatabalita') ?>" style="width:100%;">
                         <thead>
                             <tr>
                                 <th width="10">#</th>

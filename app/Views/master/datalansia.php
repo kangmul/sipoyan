@@ -13,7 +13,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="table-2-data-master-lansia" data-url="<?php echo site_url('getdatalansia') ?>">
+                    <table class="table table-striped table-hover table-sm" id="table-2-data-master-lansia" data-url="<?php echo site_url('getdatalansia') ?>" style="width:100%">
                         <thead>
                             <tr>
                                 <th width="10">#</th>

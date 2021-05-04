@@ -35,23 +35,27 @@ $routes->get('/home', 'Home::index');
 $routes->get('/defaults', 'Home::defaultBlank');
 $routes->get('/users', 'Admin\Users::index');
 
-$routes->get('/dashboard', 'Dashboard::index');
+$routes->get('/dashboard', 'DashboardController::index');
 
-$routes->get('/master/datawarga', 'Master\Masterdatawarga::index');
-$routes->get('/master/databalita', 'Master\Masterdatawarga::databalita');
-$routes->get('/master/datalansia', 'Master\Masterdatawarga::datalansia');
-$routes->get('/master/tambahdata', 'Master\Masterdatawarga::createdatawarga');
+$routes->get('/master/datawarga', 'Master\MasterdatawargaController::index');
+$routes->get('/master/databalita', 'Master\MasterdatawargaController::databalita');
+$routes->get('/master/datalansia', 'Master\MasterdatawargaController::datalansia');
+$routes->get('/master/tambahdata', 'Master\MasterdatawargaController::createdatawarga');
+$routes->get('/detailwarga/(:segment)', 'Master\MasterdatawargaController::detailwarga/$1');
+
+$routes->get('/posyandu', 'Flamboyan\PosyanduController::index');
+$routes->get('/getdatabalitaposyandu', 'Flamboyan\PosyanduController::flamboyanbalita');
 
 // ambil data reference
 $routes->get('/refagama', 'Master\Referencedata::Ajaxagama');
 
 // post data to datatable ajax
-$routes->post('getdatawarga', 'Master\Masterdatawarga::Tabeldatawarga');
-$routes->post('getdatabalita', 'Master\Masterdatawarga::Tabeldatabalita');
-$routes->post('getdatalansia', 'Master\Masterdatawarga::Tabeldatalansia');
+$routes->post('getdatawarga', 'Master\MasterdatawargaController::Tabeldatawarga');
+$routes->post('getdatabalita', 'Master\MasterdatawargaController::Tabeldatabalita');
+$routes->post('getdatalansia', 'Master\MasterdatawargaController::Tabeldatalansia');
 
 // menyimpan datawarga
-$routes->post('/master/tambahdatawarga', 'Master\Masterdatawarga::savedatawarga');
+$routes->post('/master/tambahdatawarga', 'Master\MasterdatawargaController::savedatawarga');
 // 
 
 /**
