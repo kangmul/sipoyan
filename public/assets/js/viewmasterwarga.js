@@ -53,10 +53,15 @@ $(document).ready(function() {
   });
 
   $("button#posyandu-caribalita").on("click", function() {
-    let nama = $("#formfilterbalita #posyandunamabalita").val();
-    let usia = $("#formfilterbalita #posyanduusiabalita option:selected").val();
+    let nama = $("#posyandunamabalita").val();
+    let usia = $("#posyanduusiabalita option:selected").val();
     alert("nama " + nama + " dan usia " + usia);
   });
+
+  $("#posyandu-resetcaribalita").on("click", function(){
+    $("#posyandunamabalita").val("");
+    $("#posyanduusiabalita option[value='']").val("").change();
+  })
   $("table#table-1-data-posyandu-balita").dataTable({
     processing: true,
     serverSide: true,

@@ -10,26 +10,26 @@
                 <a href="/master/tambahdata" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Tambah Data</a>
             </div>
             <div class="card-body">
-                <div id="formfilterbalita">
+                <div id="formfilterbalita justify-content-end">
                     <h6>Form Filter</h6>
-                    <div class="form-group row justify-content-end">
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Nama</label>
-                            <input type="email" class="form-control" id="posyandunamabalita" placeholder="Cari nama ...">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="inputPassword4">Usia</label>
-                            <select name="" id="posyanduusiabalita" class="form-control form-control-sm">
-                                <option value="0">-- Semua --</option>
-                                <option value="1">00 - 24 Bulan</option>
-                                <option value="2">24 - 36 Bulan</option>
-                                <option value="3">36 - 60 Bulan</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4 col-lg-2">
-                            <label for="inputPassword4">&nbsp;</label>
-                            <div class="form-control">
-                                <button class="btn btn-md btn-info" id="posyandu-caribalita"><i class="fas fa-search"></i> Cari</button>
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control form-control-sm" id="posyandunamabalita" placeholder="Cari nama ....">
+                                    <select class="custom-select form-control-sm" id="posyanduusiabalita">
+                                        <option value="" selected>Cari usia...</option>
+                                        <option value="1">00 - 24 Tahun</option>
+                                        <option value="2">24 - 36 Tahun</option>
+                                        <option value="3">36 - 60 Tahun</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-info btn-sm" type="button" id="posyandu-caribalita"><i class="fas fa-search"></i> Cari</button>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-warning btn-sm" type="button" id="posyandu-resetcaribalita"><i class="fas fa-undo"></i> Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
