@@ -15,27 +15,33 @@ class DashboardController extends BaseController
 
     public function index()
     {
-        $warga = $this->warga->getAllWarga($key = false, $limit = 0, $offset = 0);
-        $malewarga = $this->warga->countmalewarga();
-        $femalewarga = $this->warga->countfemalewarga();
-        $balita = $this->warga->getbalita($key = false, $limit = 0, $offset = 0);
-        $malebalita = $this->warga->countmalebalita();
-        $femalebalita = $this->warga->countfemalebalita();
-        $lansia = $this->warga->getlansia($key = false, $limit = 0, $offset = 0);
-        $malelansia = $this->warga->countmalelansia();
-        $femalelansia = $this->warga->countfemalelansia();
-        $data = [
-            'title' => "Dashboard",
-            'jmlwarga' => $warga["jmldatawarga"],
-            'jmlmalewarga' => $malewarga,
-            'jmlfemalewarga' => $femalewarga,
-            'jmlbalita' => $balita['jmldatabalita'],
-            'jmlfemalebalita' => $femalebalita,
-            'jmlmalebalita' => $malebalita,
-            'jmllansia' => $lansia['jmllansia'],
-            'jmlmalelansia' => $malelansia,
-            'jmlfemalelansia' => $femalelansia,
-        ];
+
+        if (logged_in()) {
+            $warga = $this->warga->getAllWarga($key = false, $limit = 0, $offset = 0);
+            $malewarga = $this->warga->countmalewarga();
+            $femalewarga = $this->warga->countfemalewarga();
+            $balita = $this->warga->getbalita($key = false, $limit = 0, $offset = 0);
+            $malebalita = $this->warga->countmalebalita();
+            $femalebalita = $this->warga->countfemalebalita();
+            $lansia = $this->warga->getlansia($key = false, $limit = 0, $offset = 0);
+            $malelansia = $this->warga->countmalelansia();
+            $femalelansia = $this->warga->countfemalelansia();
+            $user = user();
+            $data = [
+                'title' => "Dashboard",
+                'jmlwarga' => $warga["jmldatawarga"],
+                'jmlmalewarga' => $malewarga,
+                'jmlfemalewarga' => $femalewarga,
+                'jmlbalita' => $balita['jmldatabalita'],
+                'jmlfemalebalita' => $femalebalita,
+                'jmlmalebalita' => $malebalita,
+                'jmllansia' => $lansia['jmllansia'],
+                'jmlmalelansia' => $malelansia,
+                'jmlfemalelansia' => $femalelansia,
+                'user' => $user,
+            ];
+        }
+
         return view('dashboard/index', $data);
     }
 }

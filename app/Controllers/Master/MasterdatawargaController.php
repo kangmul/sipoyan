@@ -80,7 +80,7 @@ class MasterdatawargaController extends BaseController
                         "alamat" => $val["alamat"],
                         "rt" => $val["rt"],
                         "rw" => $val["rw"],
-                        "nama" => $val["nama"],
+                        "nama" => strtolower($val["nama"]),
                         "nik" => $val["nik"],
                         "jk" => $val["jk"],
                         "tmp_lahir" => $val["tmp_lahir"],
@@ -93,21 +93,21 @@ class MasterdatawargaController extends BaseController
                         "kewarganegaraan" => $val["kewarganegaraan"],
                         "no_passport" => $val["nopassport"],
                         "no_kitap" => $val["nokitap"],
-                        "nm_ayah" => $val["namaayah"],
-                        "nm_ibu" => $val["namaibu"],
+                        "nm_ayah" => strtolower($val["namaayah"]),
+                        "nm_ibu" => strtolower($val["namaibu"]),
                         "kel" => $val["kel"],
                         "kec" => $val["kec"],
                         "created_at" => date('Y-m-d H:i:s')
                     ];
                 }
                 // var_dump($data);exit;
-                for ($i = 0; $i < count($datawarga["datatabel"]); $i++){
+                for ($i = 0; $i < count($datawarga["datatabel"]); $i++) {
                     $searchdata = $this->modelwarga->where(["nik" => $data[$i]["nik"]])->first();
-                    if(!empty($searchdata)){
+                    if (!empty($searchdata)) {
                         $response['success'] = false;
-                        $response['message'] = "Data ".$data[$i]["nama"]." sudah terdaftar";
+                        $response['message'] = "Data " . $data[$i]["nama"] . " sudah terdaftar";
                         return $response;
-                    } 
+                    }
                 }
 
                 $insertomodel = new WargaModel();
@@ -187,12 +187,12 @@ class MasterdatawargaController extends BaseController
         try {
             if ($this->request->isAJAX()) {
                 $post = $this->request->getVar();
+
                 $offset = $post['start'];
                 $limit = $post['length'];
                 $search = strtolower(str_replace(" ", "+", $post['search']['value']));
 
                 $datahasil = $this->modelwarga->getbalita($search, $limit, $offset);
-
                 $databalita = [];
                 $i = 1;
                 foreach ($datahasil["databalita"] as $key => $value) {

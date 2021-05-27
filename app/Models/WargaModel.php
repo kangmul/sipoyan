@@ -23,10 +23,12 @@ class WargaModel extends Model
         $builder->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir", "inner");
         if (!empty($key)) {
             $builder->like("warga.nama", $key, "both");
+            $builder->orderBy("warga.created_at DESC");
             $getdatawarga = $builder->get($limit, $offset);
             $datawarga = $getdatawarga->getResultArray();
             $countfiltered = count($datawarga);
         } else {
+            $builder->orderBy("warga.created_at DESC");
             $getdatawarga = $builder->get($limit, $offset);
             $datawarga = $getdatawarga->getResultArray();
             $countfiltered = $builder->countAllResults();
@@ -55,31 +57,43 @@ class WargaModel extends Model
         $builder->select(["LOWER(warga.nama) as nama, warga.id as id_balita, warga.jk, warga.tgl_lahir, warga.nm_ayah, warga.nm_ibu, ref_kab_kota.nama as kota"]);
         $builder->join("ref_kab_kota", "ref_kab_kota.id = warga.tmp_lahir");
         $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-5 years")));
-        $builder->where("warga.tgl_lahir <=", date("Y-m-d"));
 
         if (!empty($key)) {
+            if($usia0to12 = false){
+                $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-1 years")));
+            }
+            if($usia12to36 = false){
+                $builder->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-1 years")));
+                $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-3 years")));
+            }
+            if($usia36to60 = false){
+                $builder->where("warga.tgl_lahir <=", date("Y-m-d", strtotime("-3 years")));
+                $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-5 years")));
+            }
+            // $builder->where("warga.tgl_lahir >=", date("Y-m-d", strtotime("-2 years")));
             $builder->like("warga.nama", $key, "both");
-            $getdatabalita = $builder->get($limit, $offset);
-            $databalita = $getdatabalita->getResultArray();
-            $countfiltered = count($databalita);
-
-            $response = [
-                'databalita' => $databalita,
-                'jmldatabalita' => $countfiltered,
-                'jmldatabalitafilter' => $countfiltered,
-            ];
-            return $response;
-        }
-        $getdatabalita = $this->get($limit, $offset);
+        } 
+        // var_dump($builder->getCompiledSelect());exit;
+        $getdatabalita = $builder->get($limit, $offset);
         $databalita = $getdatabalita->getResultArray();
         $countfiltered = count($databalita);
-        $totaldata = count($databalita);
+
         $response = [
             'databalita' => $databalita,
-            'jmldatabalita' => $totaldata,
+            'jmldatabalita' => $countfiltered,
             'jmldatabalitafilter' => $countfiltered,
         ];
         return $response;
+        // $getdatabalita = $this->get($limit, $offset);
+        // $databalita = $getdatabalita->getResultArray();
+        // $countfiltered = count($databalita);
+        // $totaldata = count($databalita);
+        // $response = [
+        //     'databalita' => $databalita,
+        //     'jmldatabalita' => $totaldata,
+        //     'jmldatabalitafilter' => $countfiltered,
+        // ];
+        // return $response;
     }
 
     public function countmalebalita()

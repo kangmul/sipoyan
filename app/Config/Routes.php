@@ -17,7 +17,7 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('DashboardController');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -31,11 +31,15 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/home', 'Home::index');
-$routes->get('/defaults', 'Home::defaultBlank');
-$routes->get('/users', 'Admin\Users::index');
+// $routes->get('/home', 'Home::index');
+// $routes->get('/defaults', 'Home::defaultBlank');
+// $routes->get('/users', 'Admin\Users::index');
 
-$routes->get('/dashboard', 'DashboardController::index');
+$routes->get('/home', 'DashboardController::index');
+
+
+// navbar Profile
+$routes->get('/profile', 'Profile\ProfileController::index');
 
 $routes->get('/master/datawarga', 'Master\MasterdatawargaController::index');
 $routes->get('/master/databalita', 'Master\MasterdatawargaController::databalita');
@@ -44,10 +48,15 @@ $routes->get('/master/tambahdata', 'Master\MasterdatawargaController::createdata
 $routes->get('/detailwarga/(:segment)', 'Master\MasterdatawargaController::detailwarga/$1');
 
 $routes->get('/posyandu', 'Flamboyan\PosyanduController::index');
-$routes->get('/getdatabalitaposyandu', 'Flamboyan\PosyanduController::flamboyanbalita');
+$routes->post('getdatabalitaposyandu', 'Flamboyan\PosyanduController::flamboyanbalita');
 
 // ambil data reference
-$routes->get('/refagama', 'Master\Referencedata::Ajaxagama');
+$routes->get('/getagama', 'Master\ReferencedataController::getagama');
+$routes->post('/getprovkabkec', 'Master\ReferencedataController::Ajaxprovkabkotakec');
+$routes->get('/getkelurahan', 'Master\ReferencedataController::getkelurahan');
+$routes->get('/getkecamatan', 'Master\ReferencedataController::getkecamatan');
+$routes->get('/gettempatlahir', 'Master\ReferencedataController::gettempatlahir');
+$routes->get('/getpendidikan', 'Master\ReferencedataController::getpendidikan');
 
 // post data to datatable ajax
 $routes->post('getdatawarga', 'Master\MasterdatawargaController::Tabeldatawarga');

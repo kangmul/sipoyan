@@ -29,6 +29,10 @@
   <link rel="stylesheet" href="<?= base_url('assets/css'); ?>/style.css">
   <link rel="stylesheet" href="<?= base_url('assets/css'); ?>/components.css">
 
+  <!-- General JS Scripts -->
+  <!-- load first -->
+  <script src="<?= base_url('assets/js'); ?>/jquery-3.3.1.min.js"></script>
+  <script src="<?= base_url('assets/vendor'); ?>/node_modules/select2/dist/js/select2.full.min.js"></script>
 
 </head>
 
@@ -59,7 +63,7 @@
 
   <!-- General JS Scripts -->
   <!-- load first -->
-  <script src="<?= base_url('assets/js'); ?>/jquery-3.3.1.min.js"></script>
+
 
   <script src="<?= base_url('assets/js'); ?>/popper.min.js"></script>
   <script src="<?= base_url('assets/js'); ?>/bootstrap.min.js"></script>
@@ -75,7 +79,7 @@
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-  <script src="<?= base_url('assets/vendor'); ?>/node_modules/select2/dist/js/select2.full.min.js"></script>
+
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/selectric/public/jquery.selectric.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <script src="<?= base_url('assets/vendor'); ?>/node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
@@ -97,7 +101,7 @@
   <!-- form add tambah data warga -->
   <script type="text/javascript" src="<?= base_url('assets/js') ?>/formtambahdatawarga.js"></script>
   <script type="text/javascript" src="<?= base_url('assets/js') ?>/viewmasterwarga.js"></script>
-  <!-- <script type="text/javascript" src="<?= base_url('assets/js') ?>/referencedata.js"></script> -->
+  <script type="text/javascript" src="<?= base_url('assets/js') ?>/referencedata.js"></script>
 
   <script src="<?= base_url('assets/js'); ?>/page/index.js"></script>
 </body>

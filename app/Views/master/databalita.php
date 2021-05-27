@@ -3,17 +3,12 @@
 <div class="section-header shadow card-primary">
     <h1><?= $title  ?></h1>
 </div>
-<?php
-// dd($warga);
-// exit;
-
-?>
 <div class="row">
     <div class="col-12">
         <div class="card shadow">
             <div class="card-header justify-content-between">
-                <h4>Data Warga</h4>
-                <a href="/master/tambahdata" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Tambah Data</a>
+                <h4>Data Balita</h4>
+                <a href="/master/tambahdata" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Tambah Balita</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

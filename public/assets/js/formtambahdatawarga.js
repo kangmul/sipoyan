@@ -1,16 +1,3 @@
-// script untuk insert kelurahan dan kecamatan
-$(".keunumber").keypress(function(e) {
-  let keynum = e.charCode;
-  if (keynum >= 48 && keynum <= 57) {
-    var nokk = $("#nokk").val();
-    // console.log(nokk);
-    // $("#kelurahan").val(nokk);
-    // $("#kecamatan").val(nokk);
-  } else {
-    swal("Failed", "Hanya angka yang dapat di input !", "error");
-  }
-});
-
 let yearnow = new Date();
 let oldyears = yearnow.getFullYear() - 80;
 let rangebirthYears = oldyears + ":" + yearnow.getFullYear();
@@ -41,9 +28,15 @@ function tambahketabel() {
   if (formterisi) {
     temporarytabel(formdata);
   }
+  // tabel temporary
+  let lokasitabel = $("table#tbl_temp_1").offset().top;
+  $('body').animate({
+    scrollTop: lokasitabel,
+  }, 1500);
+  
 }
 
-function temporarytabel(data) {
+function temporarytabel(data) { 
   var jmlchild = $("table#tbl_temp_1 tbody:last-child");
   // let nomor = $("table#tbl_temp_1 tbody tr").length + 1;
   jmlchild.append(
@@ -82,12 +75,9 @@ function temporarytabel(data) {
   $.each(data, function(index, cod) {
     $("." + cod.name).val("");
   });
-  $(".jk")
-    .prop("selectedIndex", 0)
-    .selectric("refresh");
 
   $(
-    ".agama, .tmp_lahir, .jenis_pekerjaan, .pendidikan, .status_perkawinan, .statushubkel"
+    ".agama, .tmp_lahir, .jenis_pekerjaan, .pendidikan, .status_perkawinan, .statushubkel, .jk"
   )
     .val(null)
     .trigger("change");
@@ -143,8 +133,12 @@ $("#savealltodatabase").on("click", function() {
               alamat: $("#alamat").val(),
               rt: $("#rt").val(),
               rw: $("#rw").val(),
-              kel: $("#kelurahan").val(),
-              kec: $("#kecamatan").val(),
+              kel: $("#isikelurahan")
+                .children("option:selected")
+                .val(),
+              kec: $("#isikecamatan")
+                .children("option:selected")
+                .val(),
               kepalakk: $("#kepkk").val(),
               nama: $(data)
                 .find("td:eq(0)")
@@ -214,6 +208,11 @@ $("#savealltodatabase").on("click", function() {
                 icon: "success"
               });
               $("table#tbl_temp_1 tbody tr").remove();
+              $("#nokk").val("");
+              $("#kepkk").val("");
+              $("#alamat").val("");
+              $("#rt").val("");
+              $("#rw").val("");
             } else {
               swal({
                 icon: "error",
